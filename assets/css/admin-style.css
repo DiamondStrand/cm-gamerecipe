@@ -1,0 +1,43 @@
+.cm-gamerecipe-meta-box label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.cm-gamerecipe-meta-box input[type="text"],
+.cm-gamerecipe-meta-box input[type="number"],
+.cm-gamerecipe-meta-box textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.cm-gamerecipe-meta-box textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.cm-gamerecipe-meta-box img {
+    width: 3rem;
+}
+
+.cm-gamerecipe-meta-box {
+    display: flex;
+    flex-direction: column;
+    padding: 0 6rem;
+}
+
+.cm-gamerecipe-img-download {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ff5a5f;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.cm-gamerecipe-img-download:hover {
+    background-color: #ff787c;
+}
