@@ -63,24 +63,6 @@ function cm_gamerecipe_set_default_content($content, $post)
 }
 add_filter('default_content', 'cm_gamerecipe_set_default_content', 10, 2);
 
-// Funktion för att skapa shortcode för PDF-länk
-function cm_gamerecipe_img_shortcode($atts)
-{
-    // Hämta nuvarande post-ID (måste vara inom en loop)
-    $post_id = get_the_ID();
-
-    // Hämta PDF-url från metadata
-    $img_url = get_post_meta($post_id, 'cm_gamerecipe_pdf', true);
-
-    // Om det finns en PDF, skapa nedladdningslänk
-    if ($img_url) {
-        return '<a href="' . esc_url($img_url) . '" target="_blank" class="cm-gamerecipe-img-download">Ladda ner spelplan/regelverk (IMG)</a>';
-    } else {
-        // Inget PDF tillgängligt, returnera tomt
-        return '';
-    }
-}
-
 // Lägga till en ny menyflik för CSV-import i adminpanelen
 function cm_gamerecipe_add_admin_menu()
 {

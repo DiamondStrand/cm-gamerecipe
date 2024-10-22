@@ -8,7 +8,7 @@ class CM_Gamerecipe_Shortcodes
     public static function img_download_shortcode($atts)
     {
         $post_id = get_the_ID();
-        $img_url = get_post_meta($post_id, 'cm_gamerecipe_pdf', true);
+        $img_url = get_post_meta($post_id, 'cm_gamerecipe_img', true);
         return $img_url ? '<a href="' . esc_url($img_url) . '" target="_blank">Ladda ner spelplan/regelverk (IMG)</a>' : '';
     }
 
