@@ -3,7 +3,7 @@
 Plugin Name: CM Gamerecipe
 Plugin URI: https://github.com/DiamondStrand/cm-gamerecipe
 Description: Ett flexibelt och kraftfullt plugin för att skapa och hantera spelrecept. Med CM Gamerecipe kan du enkelt lägga till spel med detaljerade regler, antal deltagare, material, speltid, och andra spelrelaterade data.
-Version: 1.0.5
+Version: 1.0.6
 Author: Diamond Strand - CookifyMedia
 Text Domain: cm-gamerecipe
 Domain Path: /languages
@@ -41,7 +41,6 @@ function cm_gamerecipe_enqueue_admin_scripts()
     wp_enqueue_script('cm-gamerecipe-upload', plugin_dir_url(__FILE__) . 'assets/js/upload.js', array('jquery'), '1.0.2', true);
 }
 add_action('admin_enqueue_scripts', 'cm_gamerecipe_enqueue_admin_scripts');
-
 
 // Ladda admin-specifik CSS för meta boxarna
 function cm_gamerecipe_admin_styles()
@@ -81,5 +80,105 @@ function cm_gamerecipe_img_shortcode($atts)
     }
 }
 
+// Lägga till en ny menyflik för CSV-import i adminpanelen
+function cm_gamerecipe_add_admin_menu()
+{
+    add_menu_page(
+        __('Importera spel', 'cm-gamerecipe'),
+        __('Importera spel', 'cm-gamerecipe'),
+        'manage_options',
+        'cm-gamerecipe-import',
+        'cm_gamerecipe_import_page',
+        'dashicons-upload',
+        26
+    );
+}
+add_action('admin_menu', 'cm_gamerecipe_add_admin_menu');
+
+// Sidlayout för import av CSV-fil
+function cm_gamerecipe_import_page()
+{
+?>
+    <div class="wrap">
+        <h1><?php _e('Importera spel från CSV', 'cm-gamerecipe'); ?></h1>
+        <p><?php _e('CSV-filen bör innehålla följande kolumner i denna ordning: Titel, Minsta spelare, Maximala spelare, Speltid, Material, Passar för, Svårighetsgrad, Förberedelser, Tips.', 'cm-gamerecipe'); ?></p>
+        <form method="post" enctype="multipart/form-data" action="">
+            <input type="file" name="csv_file" accept=".csv" required>
+            <?php submit_button(__('Importera', 'cm-gamerecipe')); ?>
+        </form>
+    </div>
+<?php
+
+    // Hantera CSV-filuppladdning
+    if (isset($_FILES['csv_file']) && !empty($_FILES['csv_file']['tmp_name'])) {
+        cm_gamerecipe_handle_csv_upload($_FILES['csv_file']);
+    }
+}
+
+function cm_gamerecipe_handle_csv_upload($file)
+{
+    // Öppna CSV-filen
+    if (($handle = fopen($file['tmp_name'], 'r')) !== false) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'cm_gamerecipe_games';
+
+        $successful_imports = 0;
+        $failed_imports = 0;
+
+        // Läs CSV-rader
+        while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            // Kontrollera att rätt antal kolumner finns i varje rad
+            if (count($data) < 9) {
+                $failed_imports++;
+                continue;
+            }
+
+            // Fortsätt med befintlig logik för att spara speldata
+            $title = sanitize_text_field($data[0]);
+            $min_players = intval($data[1]);
+            $max_players = intval($data[2]);
+            $typical_duration = intval($data[3]);
+            $materials = sanitize_text_field($data[4]);
+            $suitable_for = sanitize_text_field($data[5]);
+            $difficulty = sanitize_text_field($data[6]);
+            $preparation = sanitize_text_field($data[7]);
+            $tips = sanitize_textarea_field($data[8]);
+
+            // Skapa ett nytt inlägg (CPT)
+            $post_id = wp_insert_post(array(
+                'post_title' => $title,
+                'post_type' => 'cm_game',
+                'post_status' => 'publish'
+            ));
+
+            // Om inlägget skapades korrekt
+            if ($post_id) {
+                $successful_imports++;
+                // Spara spelets metadata i databasen
+                CM_Gamerecipe_Game_Handler::save_game_data(
+                    $post_id,
+                    $min_players,
+                    $max_players,
+                    $typical_duration,
+                    maybe_serialize(explode(',', $materials)),
+                    maybe_serialize(explode(',', $suitable_for)),
+                    $difficulty,
+                    $preparation,
+                    $tips,
+                    ''
+                );
+            } else {
+                $failed_imports++;
+            }
+        }
+        fclose($handle);
+
+        // Visa resultat av importen
+        echo '<div class="updated notice"><p>' . sprintf(__('%d spel importerades framgångsrikt. %d rader misslyckades.', 'cm-gamerecipe'), $successful_imports, $failed_imports) . '</p></div>';
+    } else {
+        echo '<div class="error notice"><p>' . __('Fel vid uppladdning av CSV-filen.', 'cm-gamerecipe') . '</p></div>';
+    }
+}
+
 // Registrera shortcoden
-add_shortcode('cm_gamerecipe_pdf_download', 'cm_gamerecipe_pdf_shortcode');
+add_shortcode('cm_gamerecipe_pdf_download', 'cm_gamerecipe_img_shortcode');
