@@ -3,7 +3,7 @@
 Plugin Name: CM Gamerecipe
 Plugin URI: https://github.com/DiamondStrand/cm-gamerecipe
 Description: Ett flexibelt och kraftfullt plugin för att skapa och hantera spelrecept. Med CM Gamerecipe kan du enkelt lägga till spel med detaljerade regler, antal deltagare, material, speltid, och andra spelrelaterade data.
-Version: 1.0.8
+Version: 1.0.9
 Author: Diamond Strand - CookifyMedia
 Text Domain: cm-gamerecipe
 Domain Path: /languages
@@ -120,7 +120,7 @@ function cm_gamerecipe_handle_csv_upload($file)
     // Öppna CSV-filen
     if (($handle = fopen($file['tmp_name'], 'r')) !== false) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'cm_gamerecipe_games';
+        $table_name = $wpdb->prefix . 'cm_gamerecipe_games'; // Variabel för din anpassade tabell
 
         $successful_imports = 0;
         $failed_imports = 0;
@@ -140,13 +140,13 @@ function cm_gamerecipe_handle_csv_upload($file)
                 continue;
             }
 
-            // Fortsätt med befintlig logik för att spara speldata
+            // Hämta och sanera CSV-data
             $title = sanitize_text_field($data[0]);
             $min_players = intval($data[1]);
             $max_players = intval($data[2]);
             $typical_duration = intval($data[3]);
-            $materials = sanitize_text_field($data[4]);
-            $suitable_for = sanitize_text_field($data[5]);
+            $materials = maybe_serialize(explode(',', sanitize_text_field($data[4])));
+            $suitable_for = maybe_serialize(explode(',', sanitize_text_field($data[5])));
             $difficulty = sanitize_text_field($data[6]);
             $preparation = sanitize_text_field($data[7]);
             $tips = sanitize_textarea_field($data[8]);
@@ -155,24 +155,31 @@ function cm_gamerecipe_handle_csv_upload($file)
             $post_id = wp_insert_post(array(
                 'post_title' => $title,
                 'post_type' => 'cm_game',
-                'post_status' => 'publish'
+                'post_status' => 'publish',
             ));
 
-            // Om inlägget skapades korrekt
+            // Kontrollera om inlägget skapades korrekt
             if ($post_id) {
                 $successful_imports++;
-                // Spara spelets metadata i databasen
-                CM_Gamerecipe_Game_Handler::save_game_data(
-                    $post_id,
-                    $min_players,
-                    $max_players,
-                    $typical_duration,
-                    maybe_serialize(explode(',', $materials)),
-                    maybe_serialize(explode(',', $suitable_for)),
-                    $difficulty,
-                    $preparation,
-                    $tips,
-                    ''
+
+                // Spara spelets metadata i den anpassade databastabellen
+                $wpdb->insert(
+                    $table_name, // Användning av $table_name här
+                    array(
+                        'post_id' => $post_id,
+                        'min_players' => $min_players,
+                        'max_players' => $max_players,
+                        'typical_duration' => $typical_duration,
+                        'materials' => $materials,
+                        'suitable_for' => $suitable_for,
+                        'difficulty' => $difficulty,
+                        'preparation' => $preparation,
+                        'tips' => $tips,
+                        'img_url' => '', // IMG-url hanteras inte här men kan läggas till
+                        'created_at' => current_time('mysql'),
+                        'updated_at' => current_time('mysql')
+                    ),
+                    array('%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
                 );
             } else {
                 $failed_imports++;
@@ -186,6 +193,7 @@ function cm_gamerecipe_handle_csv_upload($file)
         echo '<div class="error notice"><p>' . __('Fel vid uppladdning av CSV-filen.', 'cm-gamerecipe') . '</p></div>';
     }
 }
+
 
 
 // Registrera shortcoden
