@@ -3,7 +3,7 @@
 Plugin Name: CM Gamerecipe
 Plugin URI: https://github.com/DiamondStrand/cm-gamerecipe
 Description: Ett flexibelt och kraftfullt plugin för att skapa och hantera spelrecept. Med CM Gamerecipe kan du enkelt lägga till spel med detaljerade regler, antal deltagare, material, speltid, och andra spelrelaterade data.
-Version: 1.0.11
+Version: 1.0.12
 Author: Diamond Strand - CookifyMedia
 Text Domain: cm-gamerecipe
 Domain Path: /languages
@@ -77,6 +77,12 @@ function cm_gamerecipe_add_admin_menu()
     );
 }
 add_action('admin_menu', 'cm_gamerecipe_add_admin_menu');
+
+function test_shortcode()
+{
+    return 'Test shortcode fungerar!';
+}
+add_shortcode('cm_test', array(__CLASS__, 'test_shortcode'));
 
 // Sidlayout för import av CSV-fil
 function cm_gamerecipe_import_page()
