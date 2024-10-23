@@ -138,7 +138,7 @@ class CM_Gamerecipe_Game_Meta_Box
 
 
         // Anropa funktionen för att spara data i den anpassade databastabellen
-        CM_Gamerecipe_Game_Handler::save_game_data($post_id, $min_players, $max_players, $typical_duration, $materials, $suitable_for, $difficulty, $preparation, $tips, $img_url);
+        CM_Gamerecipe_Game_Handler::save_game_data($post_id, $min_players, $max_players, $typical_duration, $materials, $suitable_for, $difficulty, $preparation, $tips, $img_url, $game_type);
     }
 }
 

@@ -14,7 +14,7 @@ class CM_Gamerecipe_Game_Handler
 
 
     // Spara speldata till databasen
-    public static function save_game_data($post_id, $min_players, $max_players, $typical_duration, $materials, $suitable_for, $difficulty, $preparation, $tips, $img_url)
+    public static function save_game_data($post_id, $min_players, $max_players, $typical_duration, $materials, $suitable_for, $difficulty, $preparation, $tips, $img_url, $game_type)
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'cm_gamerecipe_games';
@@ -28,6 +28,7 @@ class CM_Gamerecipe_Game_Handler
                     'min_players' => $min_players,
                     'max_players' => $max_players,
                     'typical_duration' => $typical_duration,
+                    'game_type' => sanitize_text_field($game_type), // Lägg till game_type här
                     'materials' => maybe_serialize($materials),
                     'suitable_for' => maybe_serialize($suitable_for),
                     'difficulty' => sanitize_text_field($difficulty),
@@ -47,6 +48,7 @@ class CM_Gamerecipe_Game_Handler
                     'min_players' => $min_players,
                     'max_players' => $max_players,
                     'typical_duration' => $typical_duration,
+                    'game_type' => sanitize_text_field($game_type), // Lägg till game_type här
                     'materials' => maybe_serialize($materials),
                     'suitable_for' => maybe_serialize($suitable_for),
                     'difficulty' => sanitize_text_field($difficulty),
@@ -60,6 +62,7 @@ class CM_Gamerecipe_Game_Handler
             );
         }
     }
+
 
 
     // Ta bort speldata baserat på post ID

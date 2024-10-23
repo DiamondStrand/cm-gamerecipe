@@ -4,6 +4,8 @@
 **Författare**: Diamond Strand - CookifyMedia  
 **Plugin URI**: [https://github.com/DiamondStrand/cm-gamerecipe](https://github.com/DiamondStrand/cm-gamerecipe)
 
+> **Varning:** Detta plugin är för närvarande **inte kompatibelt med Divi 5**. Använd Divi 4 eller tidigare versioner för att säkerställa att shortcodes och funktioner fungerar som förväntat.
+
 ## Beskrivning
 
 CM Gamerecipe är ett flexibelt och kraftfullt plugin för att skapa och hantera spelrecept. Med detta plugin kan du enkelt lägga till spel med detaljerade regler, antal deltagare, material, speltid och andra spelrelaterade data. Perfekt för att hantera spelkvällar eller andra sociala sammanhang där roliga och engagerande spel behövs.
@@ -44,13 +46,18 @@ Exempelspel 2,3,6,45,kortlek,tärningar,vuxen,medel,lite,Tänk strategiskt!
 
 CM Gamerecipe innehåller kortkoder som du kan använda för att generera länkar till spelplaner eller regelverk.
 
-### Exempel på kortkod:
+| **Shortcode**                     | **Beskrivning**                                      |
+|------------------------------------|------------------------------------------------------|
+| `[cm_gamerecipe_min_players]`      | Visar minsta antal spelare för spelet.               |
+| `[cm_gamerecipe_max_players]`      | Visar maximala antal spelare för spelet.             |
+| `[cm_gamerecipe_typical_duration]` | Visar den ungefärliga speltiden för spelet.          |
+| `[cm_gamerecipe_materials]`        | Visar material som krävs för spelet.                 |
+| `[cm_gamerecipe_tips]`             | Visar tips relaterade till spelet.                   |
+| `[cm_gamerecipe_difficulty]`       | Visar svårighetsgraden för spelet.                   |
+| `[cm_gamerecipe_game_type]`        | Visar typ av spel (t.ex. brädspel, kortspel, etc.).  |
+| `[cm_gamerecipe_preparation]`      | Visar vilken typ av förberedelser spelet kräver.     |
+| `[cm_gamerecipe_suitable_for]`     | Visar vilken målgrupp spelet passar för (vuxen, barn). |
 
-```bash
-[cm_gamerecipe_pdf_download]
-```
-
-Denna kortkod genererar en nedladdningslänk till spelplanen eller regelverket (om en PDF-fil är uppladdad för spelet).
 
 ## Bidra
 
