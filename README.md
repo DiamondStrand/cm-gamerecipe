@@ -1,10 +1,12 @@
 # CM Gamerecipe
 
-**Version**: 1.0.6  
+**Version**: 1.0.15  
 **Författare**: Diamond Strand - CookifyMedia  
 **Plugin URI**: [https://github.com/DiamondStrand/cm-gamerecipe](https://github.com/DiamondStrand/cm-gamerecipe)
 
+
 > **Varning:** Detta plugin är för närvarande **inte kompatibelt med Divi 5**. Använd Divi 4 eller tidigare versioner för att säkerställa att shortcodes och funktioner fungerar som förväntat.
+
 
 ## Beskrivning
 
@@ -20,9 +22,15 @@ CM Gamerecipe är ett flexibelt och kraftfullt plugin för att skapa och hantera
 
 ## Installation
 
-1. Ladda ner och extrahera zip-filen eller klona detta repository till din WordPress `wp-content/plugins/`-katalog.
-2. Gå till **Plugins** > **Lägg till nytt** i din WordPress-administratör och aktivera pluginet.
-3. Efter aktivering, gå till **Spel**-fliken i adminpanelen för att börja lägga till eller importera spel.
+1. Ladda ner och installera senaste versionen av [Git Updater](https://github.com/afragen/git-updater/releases).
+2. Gå till **Plugins** > **Lägg till nytt** i din WordPress-administratör och aktivera Git Updater-pluginet.
+3. Efter aktivering, gå till **Inställningar** > **Git Updater** > **Install Plugin**.
+4. Under **Plugin URI**, skriv in: `https://github.com/DiamondStrand/cm-gamerecipe`.
+5. Under **Repository Branch**, skriv in: `main`.
+6. Se till att **GitHub** är valt under **Remote Repository Host**.
+7. Klicka på knappen **Install Plugin**.
+
+Nu är CM Gamerecipe installerat och redo för användning! Du kan lägga till spel, hantera befintliga spel eller importera flera spel samtidigt via importfunktionen i adminpanelen.
 
 ## CSV-Importfunktion
 
