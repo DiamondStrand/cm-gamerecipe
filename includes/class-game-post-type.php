@@ -26,12 +26,12 @@ class CM_Gamerecipe_Game_Post_Type
             'public'             => true,
             'has_archive'        => true,
             'rewrite'            => array('slug' => 'spel'),  // Slug som används i URL:en för spelen
-            'supports'           => array('title', 'editor', 'thumbnail', 'revisions', 'custom-fields'), // 'editor' för att redigera beskrivning (spelregler)
+            'supports'           => array('title', 'editor', 'thumbnail', 'revisions', 'custom-fields'), // Stöd för custom-fields
             'taxonomies'         => array('category', 'post_tag'), // Använd WordPress inbyggda kategorier och taggar
-            'show_in_rest'       => true,  // Gör CPT kompatibel med blockredigeraren (Gutenberg)
+            'show_in_rest'       => true,  // Gör CPT kompatibel med Gutenberg
             'menu_icon'          => 'dashicons-games',  // Ikon för CPT i adminpanelen
             'capability_type'    => 'post',  // Använd standardkapaciteten för posts
-            'publicly_queryable' => true,  // Gör det möjligt att visa CPT på frontend
+            'publicly_queryable' => true,  // Möjliggör frontend-visning
             'show_ui'            => true,  // Visa CPT i adminpanelen
             'show_in_menu'       => true,  // Visa CPT i adminmenyn
             'menu_position'      => 20,    // Placering i adminmenyn
@@ -44,7 +44,7 @@ class CM_Gamerecipe_Game_Post_Type
 // Registrera posttypen vid WordPress init
 add_action('init', array('CM_Gamerecipe_Game_Post_Type', 'register_post_type'));
 
-// Flush omskrivningsregler vid aktivering för att säkerställa att reglerna uppdateras
+// Flush omskrivningsregler vid aktivering
 function cm_gamerecipe_flush_rewrite_rules()
 {
     CM_Gamerecipe_Game_Post_Type::register_post_type();

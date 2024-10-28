@@ -1,49 +1,37 @@
 <?php
 class CM_Gamerecipe_DB_Handler
 {
-    // Skapa databastabeller när pluginet aktiveras
-    public static function create_db_tables()
+    // Skapa materialtabellen när pluginet aktiveras
+    public static function create_material_table()
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'cm_gamerecipe_games';
+        $table_name = $wpdb->prefix . 'cm_gamerecipe_materials';
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-        id INT(11) NOT NULL AUTO_INCREMENT,
-        post_id BIGINT(20) UNSIGNED NOT NULL,
-        min_players INT(3) NOT NULL,
-        max_players INT(3) NOT NULL,
-        typical_duration INT(3) NOT NULL,
-        game_type VARCHAR(100) NOT NULL,
-        materials TEXT NOT NULL,
-        suitable_for TEXT NOT NULL,
-        difficulty VARCHAR(50) NOT NULL,
-        preparation VARCHAR(50) NOT NULL,
-        tips TEXT,
-        img_url VARCHAR(255),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        PRIMARY KEY (id),
-        FOREIGN KEY (post_id) REFERENCES {$wpdb->prefix}posts(ID) ON DELETE CASCADE
-    ) $charset_collate;";
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            description TEXT DEFAULT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     }
 
-
-    // Rensa regler och tabeller när pluginet avaktiveras
+    // Rensa permalänkar eller andra regler när pluginet avaktiveras
     public static function deactivate_plugin()
     {
-        // Här kan du rensa permalänksstrukturer eller andra regler om nödvändigt
         flush_rewrite_rules();
     }
 
-    // Ta bort tabellen om pluginet avinstalleras (använd vid total borttagning av pluginet)
-    public static function delete_db_tables()
+    // Ta bort materialtabellen om pluginet avinstalleras
+    public static function delete_material_table()
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'cm_gamerecipe_games';
+        $table_name = $wpdb->prefix . 'cm_gamerecipe_materials';
 
         // Ta bort tabellen vid avinstallation
         $sql = "DROP TABLE IF EXISTS $table_name;";
@@ -51,5 +39,8 @@ class CM_Gamerecipe_DB_Handler
     }
 }
 
-// Lägg till hook för att ta bort tabellen om pluginet avinstalleras
-register_uninstall_hook(__FILE__, array('CM_Gamerecipe_DB_Handler', 'delete_db_tables'));
+// Hook för att skapa tabellen när pluginet aktiveras
+register_activation_hook(__FILE__, array('CM_Gamerecipe_DB_Handler', 'create_material_table'));
+
+// Hook för att ta bort materialtabellen om pluginet avinstalleras
+register_uninstall_hook(__FILE__, array('CM_Gamerecipe_DB_Handler', 'delete_material_table'));
